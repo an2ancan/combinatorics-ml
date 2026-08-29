@@ -50,3 +50,33 @@ import numpy as np
 train = np.load("TSP_Data/tsp_50/train.npy")  # (128000, 50, 2)
 val   = np.load("TSP_Data/tsp_50/val.npy")    # (10000, 50, 2)
 ```
+
+## Stage 2 — OR-Tools Baseline
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/an2ancan/combinatorics-ml/blob/main/TSP_Baseline_ORTools.ipynb)
+
+The notebook [`TSP_Baseline_ORTools.ipynb`](TSP_Baseline_ORTools.ipynb) evaluates
+**Google OR-Tools** as a baseline solver on the validation datasets.
+
+For each TSP size it solves a configurable sample of instances and reports:
+- **Tour length** (mean, std, min, max)
+- **Wall-clock time** per instance
+- **Solver status** (solved / timeout / failed)
+- Optimality report and visualisations
+
+### Solver settings
+
+| Parameter | Default |
+|---|---|
+| Instances per size | 128 |
+| Time limit per instance | 10 s |
+| First solution strategy | `PATH_CHEAPEST_ARC` |
+| Metaheuristic | `GUIDED_LOCAL_SEARCH` |
+
+### Output
+
+Results are saved to `MyDrive/TSP_Data/baseline_results/`:
+- `ortools_summary.csv` — summary stats per TSP size
+- `ortools_per_instance.csv` — per-instance tour lengths & times
+- `ortools_lengths_tsp_{n}.npy` — tour length arrays for gap computation
+- `config.json` — solver configuration snapshot
