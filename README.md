@@ -80,3 +80,46 @@ Results are saved to `MyDrive/TSP_Data/baseline_results/`:
 - `ortools_per_instance.csv` — per-instance tour lengths & times
 - `ortools_lengths_tsp_{n}.npy` — tour length arrays for gap computation
 - `config.json` — solver configuration snapshot
+
+## Stage 3 — Concorde Baseline (Exact Solver)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/an2ancan/combinatorics-ml/blob/main/TSP_Baseline_Concorde.ipynb)
+
+The notebook [`TSP_Baseline_Concorde.ipynb`](TSP_Baseline_Concorde.ipynb) evaluates
+**Concorde** — the gold-standard exact solver for TSP. It finds provably optimal
+solutions via branch-and-cut, providing ground truth for optimality gap computation.
+
+Best suited for TSP-10 through TSP-100; may be slow on larger instances.
+
+| Parameter | Default |
+|---|---|
+| Instances per size | 128 |
+| Time limit per instance | 300 s |
+
+### Output
+
+Results are saved to `MyDrive/TSP_Data/baseline_results/`:
+- `concorde_summary.csv`, `concorde_per_instance.csv`
+- `concorde_lengths_tsp_{n}.npy` — optimal tour lengths
+
+## Stage 4 — LKH-3 Baseline (Lin-Kernighan Heuristic)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/an2ancan/combinatorics-ml/blob/main/TSP_Baseline_LKH3.ipynb)
+
+The notebook [`TSP_Baseline_LKH3.ipynb`](TSP_Baseline_LKH3.ipynb) evaluates
+**LKH-3** — the state-of-the-art heuristic solver. It produces near-optimal solutions
+(typically within 0.5% of optimal) and scales to thousands of nodes. Primary baseline
+for large TSP instances where Concorde is too slow.
+
+| Parameter | Default |
+|---|---|
+| Instances per size | 128 |
+| Time limit per instance | 60 s |
+| LKH runs per instance | 1 |
+| Max trials per run | 1000 |
+
+### Output
+
+Results are saved to `MyDrive/TSP_Data/baseline_results/`:
+- `lkh3_summary.csv`, `lkh3_per_instance.csv`
+- `lkh3_lengths_tsp_{n}.npy` — near-optimal tour lengths
