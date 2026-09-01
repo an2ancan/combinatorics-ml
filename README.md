@@ -125,6 +125,29 @@ Results are saved to `MyDrive/TSP_Data/baseline_results/`:
 - `lkh3_summary.csv`, `lkh3_per_instance.csv`
 - `lkh3_lengths_tsp_{n}.npy` — near-optimal tour lengths
 
+## Stage 5 — Seq2Seq Model (Pointer Network)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/an2ancan/combinatorics-ml/blob/main/TSP_Model_Seq2Seq.ipynb)
+
+The notebook [`TSP_Model_Seq2Seq.ipynb`](TSP_Model_Seq2Seq.ipynb) trains a
+**Sequence-to-Sequence neural network with Pointer Attention** (Pointer Network)
+to solve the TSP.
+
+### Key Architecture Details
+- **Embedding & Bi-LSTM Encoder**: Encodes 2D node coordinates into context-aware latent states.
+- **Autoregressive Decoder with Pointer Attention**: Uses Bahdanau attention with dynamic boolean masking of visited cities to select valid permutations.
+- **REINFORCE Training**: Trains directly on `train.npy` (128,000 instances) using policy gradient with an Exponential Moving Average (EMA) baseline.
+- **Validation**: Evaluates on `val.npy` with greedy decoding and compares against classical baselines (OR-Tools, Concorde).
+
+| Parameter | Default |
+|---|---|
+| Problem size | TSP-20 (configurable) |
+| Embedding / Hidden dim | 128 / 128 |
+| Batch size | 256 |
+| Learning rate | 1e-3 (Adam) |
+| Epochs | 10 |
+| Baseline | EMA (beta=0.9) |
+
 ---
 
 ## Local Setup & Running Notebooks
@@ -203,6 +226,7 @@ task data-gen    # Open TSP_Data_Generation.ipynb in JupyterLab
 task ortools     # Open TSP_Baseline_ORTools.ipynb in JupyterLab
 task concorde    # Open TSP_Baseline_Concorde.ipynb in JupyterLab
 task lkh3        # Open TSP_Baseline_LKH3.ipynb in JupyterLab
+task seq2seq     # Open TSP_Model_Seq2Seq.ipynb in JupyterLab
 ```
 
 Or launch the entire workspace:

@@ -22,6 +22,8 @@ build/
 TSP_Data/
 baseline_results/
 data/
+checkpoints/
+*.pt
 
 # Environment files and credentials
 .env

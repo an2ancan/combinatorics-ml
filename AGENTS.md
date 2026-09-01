@@ -34,6 +34,7 @@ This repository explores Machine Learning and Deep Learning approaches for class
 | `TSP_Baseline_ORTools.ipynb` | Google OR-Tools baseline solver | Solves validation instances using OR-Tools Routing Model with `PATH_CHEAPEST_ARC` and `GUIDED_LOCAL_SEARCH`. Records tour lengths, solve times, and solver statuses. |
 | `TSP_Baseline_Concorde.ipynb` | Concorde exact solver baseline | Uses `pyconcorde` (branch-and-cut) to find provably optimal solutions. Primary ground truth for small-to-medium instances (TSP-10 to TSP-100). |
 | `TSP_Baseline_LKH3.ipynb` | LKH-3 heuristic baseline | Compiles and executes LKH-3 (Lin-Kernighan heuristic) via TSPLIB format. Near-optimal baseline for medium-to-large problem sizes up to TSP-200. |
+| `TSP_Model_Seq2Seq.ipynb` | Seq2Seq Pointer Network solver | Trains a neural Pointer Network on uniform 2D TSP instances using REINFORCE policy gradients with an EMA baseline. Evaluates optimality gap against classical baselines. |
 
 ---
 

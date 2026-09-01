@@ -81,3 +81,9 @@ tasks:
     aliases: [lkh]
     cmds:
       - uv run jupyter lab TSP_Baseline_LKH3.ipynb
+
+  seq2seq:
+    desc: Start the Seq2Seq Pointer Network notebook
+    aliases: [ptr, ptr-net, s2s]
+    cmds:
+      - uv run jupyter lab TSP_Model_Seq2Seq.ipynb
