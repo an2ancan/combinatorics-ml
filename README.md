@@ -69,6 +69,7 @@ For each TSP size it solves a configurable sample of instances and reports:
 | Parameter | Default |
 |---|---|
 | Instances per size | 128 |
+| Parallel workers | 12 CPUs (configurable via `NUM_WORKERS`) |
 | Time limit per instance | 10 s |
 | First solution strategy | `PATH_CHEAPEST_ARC` |
 | Metaheuristic | `GUIDED_LOCAL_SEARCH` |
@@ -123,3 +124,98 @@ for large TSP instances where Concorde is too slow.
 Results are saved to `MyDrive/TSP_Data/baseline_results/`:
 - `lkh3_summary.csv`, `lkh3_per_instance.csv`
 - `lkh3_lengths_tsp_{n}.npy` — near-optimal tour lengths
+
+---
+
+## Local Setup & Running Notebooks
+
+This project uses [`uv`](https://docs.astral.sh/uv/) for Python dependency and environment management.
+
+### Prerequisites
+
+Install `uv` if you haven't already:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Environment Setup
+
+1. Clone the repository and install all dependencies:
+   ```bash
+   uv sync
+   ```
+
+2. (Optional) Install optional solver extras like Concorde:
+   ```bash
+   uv sync --extra concorde
+   ```
+
+### Environment Configuration (.env)
+
+Copy `.env.example` to `.env` to customize your local configuration:
+
+```bash
+cp .env.example .env
+```
+
+Key variables in `.env`:
+* `RUN_LOCALLY=True` — Switches data/results paths from `/content/drive/...` to local directory `./TSP_Data`. (Defaults to `False` on Colab).
+* `NUM_WORKERS=12` — Number of CPU workers for parallel baseline evaluations.
+* `TSP_DATA_DIR="./TSP_Data"` — Local directory for generated datasets (excluded from git).
+* `TSP_RESULTS_DIR="./TSP_Data/baseline_results"` — Local directory for baseline evaluations (excluded from git).
+* `RCLONE_REMOTE_DATA="gdrive:TSP_Data"` — Remote target for data synchronization via `rclone`.
+
+### Syncing Data with Google Drive / Cloud
+
+1. Configure `rclone` locally for this repository (creates `.rclone.conf`, ignored by git):
+   ```bash
+   task rclone:config
+   ```
+   * Choose `n` (New remote), name it `gdrive`, choose `drive` (Google Drive), and complete browser authentication.
+
+2. Verify connection:
+   ```bash
+   task rclone:ls
+   ```
+
+3. Pull or push datasets and baseline results:
+   ```bash
+   # Pull datasets from Google Drive to local ./TSP_Data
+   task sync:data:pull
+
+   # Push local datasets to Google Drive
+   task sync:data:push
+
+   # Pull baseline results from Google Drive
+   task sync:results:pull
+
+   # Push local baseline results to Google Drive
+   task sync:results:push
+   ```
+
+### Running the Notebooks Locally
+
+You can launch individual notebooks directly using [Task](https://taskfile.dev/):
+
+```bash
+task data-gen    # Open TSP_Data_Generation.ipynb in JupyterLab
+task ortools     # Open TSP_Baseline_ORTools.ipynb in JupyterLab
+task concorde    # Open TSP_Baseline_Concorde.ipynb in JupyterLab
+task lkh3        # Open TSP_Baseline_LKH3.ipynb in JupyterLab
+```
+
+Or launch the entire workspace:
+
+```bash
+task lab         # Launch full JupyterLab workspace
+```
+
+Alternatively, run directly with `uv`:
+
+```bash
+uv run jupyter lab [notebook_name.ipynb]
+```
+
+
+

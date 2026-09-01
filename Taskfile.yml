@@ -1,0 +1,83 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list
+
+  sync:
+    desc: Synchronize dependencies with uv
+    cmds:
+      - uv sync
+
+  sync:all:
+    desc: Synchronize all dependencies including extras (concorde, dev)
+    cmds:
+      - uv sync --all-extras
+
+  rclone:config:
+    desc: Configure Google Drive remote locally in .rclone.conf
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" config
+
+  rclone:ls:
+    desc: List remote folders in Google Drive
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" lsd "${RCLONE_REMOTE_DATA:-gdrive:}"
+
+  sync:data:
+    desc: Pull dataset from Google Drive (alias for sync:data:pull)
+    cmds:
+      - task: sync:data:pull
+
+  sync:data:pull:
+    desc: Pull dataset from Google Drive to local directory
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" copy "${RCLONE_REMOTE_DATA:-gdrive:TSP_Data}" "${TSP_DATA_DIR:-./TSP_Data}" --progress
+
+  sync:data:push:
+    desc: Push local dataset to Google Drive
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" copy "${TSP_DATA_DIR:-./TSP_Data}" "${RCLONE_REMOTE_DATA:-gdrive:TSP_Data}" --progress
+
+  sync:results:pull:
+    desc: Pull baseline results from Google Drive
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" copy "${RCLONE_REMOTE_RESULTS:-gdrive:TSP_Data/baseline_results}" "${TSP_RESULTS_DIR:-./TSP_Data/baseline_results}" --progress
+
+  sync:results:push:
+    desc: Push local baseline results to Google Drive
+    cmds:
+      - rclone --config "${RCLONE_CONFIG:-./.rclone.conf}" copy "${TSP_RESULTS_DIR:-./TSP_Data/baseline_results}" "${RCLONE_REMOTE_RESULTS:-gdrive:TSP_Data/baseline_results}" --progress
+
+  lab:
+    desc: Start JupyterLab workspace
+    cmds:
+      - uv run jupyter lab
+
+  data-gen:
+    desc: Start the TSP Data Generation notebook
+    aliases: [gen, data]
+    cmds:
+      - uv run jupyter lab TSP_Data_Generation.ipynb
+
+  ortools:
+    desc: Start the OR-Tools baseline notebook
+    aliases: [ort]
+    cmds:
+      - uv run jupyter lab TSP_Baseline_ORTools.ipynb
+
+  concorde:
+    desc: Start the Concorde baseline notebook
+    aliases: [conc]
+    cmds:
+      - uv run jupyter lab TSP_Baseline_Concorde.ipynb
+
+  lkh3:
+    desc: Start the LKH-3 baseline notebook
+    aliases: [lkh]
+    cmds:
+      - uv run jupyter lab TSP_Baseline_LKH3.ipynb

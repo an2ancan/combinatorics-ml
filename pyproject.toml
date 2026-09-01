@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "combinatorics-ml"
+version = "0.1.0"
+description = "Machine Learning and Deep Learning approaches for classical Combinatorial Optimization problems"
+readme = "README.md"
+requires-python = ">=3.10, <3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "an2ancan" }
+]
+dependencies = [
+    "ipykernel>=6.25.0",
+    "ipywidgets>=8.0.0",
+    "jupyterlab>=4.0.0",
+    "matplotlib>=3.7.0",
+    "notebook>=7.0.0",
+    "numpy>=1.24.0",
+    "ortools>=9.6.0",
+    "pandas>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "scipy>=1.10.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+concorde = [
+    "pyconcorde",
+]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.4.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+pyconcorde = { git = "https://github.com/jvkersch/pyconcorde" }
